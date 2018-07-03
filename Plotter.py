@@ -22,24 +22,41 @@ class Plotter():
         self.fig = plt.figure(figsize=(8,6))
         self.ax = self.fig.add_subplot(111, projection="mollweide")
         
-    def detFormat(self, input_str):
+        self.form = self.detFormat()
+        print(self.form)
         
-        regex[1] = '\d{1,2}[h]\d{1,2}[m][+ -]{,1}\d{1,2}[d]\d{1,2}[m]'
-        regex[2] = '\d{1,2}[h]\d{1,2}[+ -]{,1}\d{1,2}[d]\d{1,2}'
-        regex[3] = '\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}\s[+-]{,1}\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}' #this will work with rachels now with the addition of '\s' (whitespace in general)
-        regex[4] = '\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}[+-]{,1}\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}'
         
-        format_index = 0
+    def detFormat(self):
+        
+        with open(self.filename) as f:
+            content = f.readlines()
+    
+        print (content[1]) # second row of the data
+        
+        regex = []
+        regex.append('\d{1,2}[h]\d{1,2}[m][+ -]{,1}\d{1,2}[d]\d{1,2}[m]')
+        regex.append('\d{1,2}[h]\d{1,2}[+ -]{,1}\d{1,2}[d]\d{1,2}')
+        regex.append('\d*\s*\d*[.]{,1}\d*\s*\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}\s[+-]{,1}\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}') #this will work with rachels now with the addition of '\s' (whitespace in general)
+        regex.append('\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}[+-]{,1}\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}')
+          
+        format_index = 9
              
-        for i in range(4):
-            
-            preg = re.compile(regex[i])
-            
-            if (preg.match(input_str)):
+        for i in range(4): 
+            preg = re.compile(regex[i]) 
+            if (preg.match(content[1])):
                 format_index = i
                 break
-                    
-            
+        
+        form = "N/A"
+        
+        if (format_index == 0):
+            form = "a"
+        elif (format_index == 1):
+            form = "b"
+        elif (format_index == 2):
+            form = "c"
+        elif (format_index == 3):
+            form = "d"
         #FINISH THE OUTPUT, DETERMINE TYPE BASED ON FORMAT_INDEX!!!
         
         #some sort of determination
@@ -53,14 +70,14 @@ class Plotter():
         
     def readFileData(self):
         
-        data = ascii.read(self.filename, header_start=0, data_start=0)
-        data['ra'].fill_value = "N/A"
-        print (data.filled())
+        data = ascii.read(self.filename, delimiter = "\s", header_start=0, data_start=1)
+        #data['EPICID'].fill_value = "N/A"
+        print (data)#.filled())
         
         
     def plotFileData(self):
         
-        data = ascii.read(self.filename, header_start=0, data_start=0)
+        data = ascii.read(self.filename, delimiter = "\s", header_start=0, data_start=1)
         data['ra'].fill_value = "N/A"
         
         ra = coord.Angle(data['ra']*u.degree)
@@ -114,13 +131,10 @@ class Plotter():
             y_plot.append(y)
             
         self.ax.plot(longitude2,latitude2,'g-')
-    
-
 
 plotter = Plotter()
 plotter.readFileData()
-plotter.plotFileData()
-plotter.plotCelEq()
+
 
 
 
