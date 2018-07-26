@@ -16,9 +16,9 @@ from astroquery.simbad import Simbad
 import re #the regular expressions package for detecting input format
 
 
-filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
-file = open(filename)
-data = file.read().splitlines()
+#filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
+#file = open(filename)
+#data = file.read().splitlines()
 
 
 #This is hella slow, there is probably a way to do this matrixy? 
@@ -27,21 +27,25 @@ data = file.read().splitlines()
 ras = []
 decs = []
 
-print(len(data))
-for i in range(len(data)):
+x = False
+if (x):
+    print(len(data))
+    for i in range(len(data)):
  
-    print(i)
-    result_table = Simbad.query_object(data[i])
-    print(len(result_table))
+        print(i)
+        result_table = Simbad.query_object(data[i])
+        print(len(result_table))
  
-    ra = coord.Angle(result_table["RA"][0], unit=u.hour)
-    dec = coord.Angle(result_table["DEC"][0], unit=u.degree)
-    ra = ra.wrap_at(12 * u.hourangle)
+        ra = coord.Angle(result_table["RA"][0], unit=u.hour)
+        dec = coord.Angle(result_table["DEC"][0], unit=u.degree)
+        ra = ra.wrap_at(12 * u.hourangle)
  
-    ras.append(ra.radian)
-    decs.append(dec.radian)
+        ras.append(ra.radian)
+        decs.append(dec.radian)
  
-fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot(111, projection="mollweide")
-ax.scatter(ras, decs)
+    fig = plt.figure(figsize=(8,6))
+    ax = fig.add_subplot(111, projection="mollweide")
+    ax.scatter(ras, decs)
 
+ra = coord.Angle('15h17m', unit=u.hour)
+print (ra.radian)

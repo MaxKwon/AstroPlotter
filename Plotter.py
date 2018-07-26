@@ -37,10 +37,10 @@ class Plotter():
             print (content[1]) # first actual row of the data content[0] is the headers
               
         regex = []
-        regex.append('\d{1,2}[h]\d{1,2}[m][+ -]{,1}\d{1,2}[d]\d{1,2}[m]') #15h17m-11d10m
-        regex.append('\d{1,2}[h]\d{1,2}[+ -]{,1}\d{1,2}[d]\d{1,2}') #15h17+89d15
+        regex.append('\d{1,2}[h]\d{1,2}[m]\s[+ -]{,1}\d{1,2}[d]\d{1,2}[m]') #15h17m -11d10m
+        regex.append('\d{1,2}[h]\d{1,2}\s[+ -]{,1}\d{1,2}[d]\d{1,2}') #15h17 +89d15
         regex.append('\d*\s*\d*[.]{,1}\d*\s*\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}\s[+-]{,1}\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}') #20 54 05.689 +37 01 17.38 
-        regex.append('\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}[+-]{,1}\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}') # 10:12:45.3-45:17:50
+        regex.append('\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}\s[+-]{,1}\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}') # 10:12:45.3 -45:17:50
           
         format_index = 9
              
@@ -70,9 +70,23 @@ class Plotter():
         ras = []
         decs = []
         
-        if (form == "c"): 
+        #Have all the formats be ID, REC, DEC and let it be the users problem after that 
+        
+        if (form == "a" or form == "b" or form == "d"):
             for i in range(len(data)):
-                ra_str = str(data[i][2]) + ":" + str(data[i][3]) + ":" + str(data[i][4])
+                ra_str = str(data[i][1])
+                dec_str = str(data[i][2])
+                
+                ra = coord.Angle(ra_str, unit=u.hour)
+                dec = coord.Angle(dec_str, unit=u.degree)
+                ra = ra.wrap_at(12 * u.hourangle)
+ 
+                ras.append(ra.radian)
+                decs.append(dec.radian)
+        
+        elif (form == "c"): 
+            for i in range(len(data)):
+                ra_str = str(data[i][2]) + ":" + str(data[i][3]) + ":" + str(data[i][4]) #should start at data[i][1] but the test data has another garbage data column
                 dec_str = str(data[i][5]) + ":" + str(data[i][6]) + ":" + str(data[i][7])
                 
                 ra = coord.Angle(ra_str, unit=u.hour)
