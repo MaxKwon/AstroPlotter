@@ -12,7 +12,7 @@ from astropy.io import fits
 from tkinter.filedialog import askopenfilename
 from tkinter import *
 import math
-import astroquery.simbad #using to fill blank data points with queries from simbad database
+from astroquery.simbad import Simbad#using to fill blank data points with queries from simbad database
 import re #the regular expressions package for detecting input format
 
 class Plotter():
@@ -41,10 +41,11 @@ class Plotter():
         regex.append('\d{1,2}[h]\d{1,2}\s[+ -]{,1}\d{1,2}[d]\d{1,2}') #15h17 +89d15
         regex.append('\d*\s*\d*[.]{,1}\d*\s*\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}\s[+-]{,1}\d{1,3}\s\d{1,3}\s\d{1,3}[.]{,1}\d{,3}') #20 54 05.689 +37 01 17.38 
         regex.append('\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}\s[+-]{,1}\d{1,3}:\d{1,3}:\d{1,3}[.]{,1}\d{,4}') # 10:12:45.3 -45:17:50
+        regex.append('[a-zA-Z]{1,4}\s{,1}\d{1,8}') # Simple list like "HD 172167" or "HIP97649"
           
         format_index = 9
              
-        for i in range(4): 
+        for i in range(len(regex)): 
             preg = re.compile(regex[i]) 
             if (preg.match(content[1])):
                 format_index = i
@@ -60,18 +61,28 @@ class Plotter():
             form = "c"
         elif (format_index == 3):
             form = "d"
+        elif (format_index == 4):
+            form = "simple"
         
         return form
     
     def formatData(self, form):
         
-        data = ascii.read(self.filename)
+        #easier for the simple data to just split it by rows
+        if (form == "simple"):
+            file = open(self.filename)
+            data = file.read().splitlines()
+        else:
+            data = ascii.read(self.filename)
+            
         
         ras = []
         decs = []
         
         #Have all the formats be ID, REC, DEC and let it be the users problem after that 
+        #To add: simbad query support for missing data points
         
+        #you can do this in less lines by blending the ifs, however this may be the easiest way to read it 
         if (form == "a" or form == "b" or form == "d"):
             for i in range(len(data)):
                 ra_str = str(data[i][1])
@@ -83,7 +94,7 @@ class Plotter():
  
                 ras.append(ra.radian)
                 decs.append(dec.radian)
-        
+          
         elif (form == "c"): 
             for i in range(len(data)):
                 ra_str = str(data[i][2]) + ":" + str(data[i][3]) + ":" + str(data[i][4]) #should start at data[i][1] but the test data has another garbage data column
@@ -91,6 +102,17 @@ class Plotter():
                 
                 ra = coord.Angle(ra_str, unit=u.hour)
                 dec = coord.Angle(dec_str, unit=u.degree)
+                ra = ra.wrap_at(12 * u.hourangle)
+ 
+                ras.append(ra.radian)
+                decs.append(dec.radian)
+                
+        elif (form == "simple"):
+            for i in range(len(data)):
+                result_table = Simbad.query_object(data[i])
+ 
+                ra = coord.Angle(result_table["RA"][0], unit=u.hour)
+                dec = coord.Angle(result_table["DEC"][0], unit=u.degree)
                 ra = ra.wrap_at(12 * u.hourangle)
  
                 ras.append(ra.radian)
@@ -194,6 +216,9 @@ class Plotter():
         self.plotTelescopeLimit()
         self.plotFileData()
         
+#make a gui selector for which plots they want - tomorrow 
+#make the file an excecutable for convienince - today 
+#add simple inputs support - today
         
     
 plotter = Plotter()

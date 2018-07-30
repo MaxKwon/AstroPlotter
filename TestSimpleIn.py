@@ -16,9 +16,9 @@ from astroquery.simbad import Simbad
 import re #the regular expressions package for detecting input format
 
 
-#filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
-#file = open(filename)
-#data = file.read().splitlines()
+filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
+file = open(filename)
+data = file.read().splitlines()
 
 
 #This is hella slow, there is probably a way to do this matrixy? 
@@ -27,7 +27,7 @@ import re #the regular expressions package for detecting input format
 ras = []
 decs = []
 
-x = False
+x = True
 if (x):
     print(len(data))
     for i in range(len(data)):
@@ -47,5 +47,5 @@ if (x):
     ax = fig.add_subplot(111, projection="mollweide")
     ax.scatter(ras, decs)
 
-ra = coord.Angle('15h17m', unit=u.hour)
-print (ra.radian)
+#ra = coord.Angle('15h17m', unit=u.hour)
+#print (ra.radian)
