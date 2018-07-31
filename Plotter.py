@@ -75,7 +75,7 @@ class Plotter():
         else:
             data = ascii.read(self.filename)
             
-        
+        #initialize the arrays that will be storing the data 
         ras = []
         decs = []
         
@@ -217,15 +217,13 @@ class Plotter():
         self.plotFileData()
         
 #make a gui selector for which plots they want - tomorrow 
-#make the file an excecutable for convienince - today 
-#add simple inputs support - today
-        
+#make the file an excecutable for convienince - today         
     
-plotter = Plotter()
+##plotter = Plotter() this one
 #plotter.plotTelescopeLimit()
 #plotter.plotCelEq()
 #plotter.printFileData()
-plotter.fullPlot()
+##plotter.fullPlot() this one 
 
 
 
