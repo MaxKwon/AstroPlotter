@@ -222,8 +222,12 @@ class Plotter():
         self.plotTelescopeLimit()
         self.plotFileData()
         
-#make a gui selector for which plots they want - tomorrow 
-#make the file an excecutable for convienince - today         
+        
+#make the file an excecutable for convienince 
+#text to show acceptable input types, simple text additions
+#nicer GUI in general
+#Simbad for missing data 1 
+#integrate some of the software tools for conversion?
     
 ##plotter = Plotter() this one
 #plotter.plotTelescopeLimit()
