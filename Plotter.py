@@ -22,8 +22,10 @@ class Plotter():
         self.test = False
         
         self.filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
+        
         self.fig = plt.figure(figsize=(8,6))
         self.ax = self.fig.add_subplot(111, projection="mollweide")
+        self.fig.set_visible(False)
         
         self.form = self.detFormat()
         print(self.form)
@@ -146,7 +148,7 @@ class Plotter():
         
         self.ax.scatter(ras, decs)
         
-        
+        self.fig.set_visible(True)
         
     def plotCelEq(self):
         
@@ -194,6 +196,8 @@ class Plotter():
             
         self.ax.plot(longitude2,latitude2,'g-')
         
+        self.fig.set_visible(True)
+        
     def plotTelescopeLimit(self):
         
         #limits for the gemini north telescope 
@@ -209,6 +213,8 @@ class Plotter():
         self.ax.plot([ra[0].radian, ra[1].radian], [dec[1].radian, dec[1].radian], "k-")
         self.ax.plot([ra[1].radian, ra[1].radian], [dec[1].radian, dec[0].radian], "k-")
         self.ax.plot([ra[1].radian, ra[0].radian], [dec[0].radian, dec[0].radian], "k-")
+        
+        self.fig.set_visible(True)
         
     def fullPlot(self):
         
