@@ -224,10 +224,9 @@ class Plotter():
         
         
 #make the file an excecutable for convienince 
-#text to show acceptable input types, simple text additions
+#simple text additions
 #nicer GUI in general
-#Simbad for missing data 1 
-#integrate some of the software tools for conversion?
+#Simbad for missing data 1
     
 ##plotter = Plotter() this one
 #plotter.plotTelescopeLimit()

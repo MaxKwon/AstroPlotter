@@ -27,6 +27,10 @@ class Runner(Frame):
         
         self.pack(expand=1)
         
+        T = Text(self.master, height=2, width=30)
+        T.pack()
+        T.insert(END, "Formats Accepted: TBA")
+        
         add_datafile_button = Button(self, text="Select Data", command=self.SelectData) #Button(self, text = "Quit Plotter", command=QuitPlotter)
         add_datafile_button.pack(side=TOP)
         
@@ -86,8 +90,4 @@ class Runner(Frame):
         exit()
     
     
-root = Tk()
 
-runner = Runner(root)
-
-root.mainloop()

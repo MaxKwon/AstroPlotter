@@ -1,0 +1,11 @@
+Acceptable Formats for Input:
+15h17m -11d10m
+15h17 +89d15
+20 54 05.689 +37 01 17.38 
+10:12:45.3 -45:17:50
+Simple list like "HD 172167" or "HIP97649"
+
+Inputs should be in form of "ID" "RA" "DEC" deliminated by a tab or 
+other whitespace. For simple input list, one per line/row.
+
+
