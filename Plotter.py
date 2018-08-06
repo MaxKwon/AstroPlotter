@@ -224,9 +224,12 @@ class Plotter():
         self.plotTelescopeLimit()
         self.plotFileData()
         
-    def savePlot(self, plot_file_name):
+    def savePlot(self):
         
-        self.ax.savefig(plot_file_name)
+        save_name = "plot.jpg"
+        
+        self.fig.savefig(save_name)
+        print("SAVED AS: ", save_name)
         
         
 #make the file an excecutable for convienince 
