@@ -2,10 +2,10 @@
 Created on Wed Jul 30 2:10:30 2018
 @author: Max K. Kwon 
 """
-
 import Plotter as plot
+import threading
+import sys
 from tkinter import*
-
 
 
 class Runner(Frame):
@@ -23,7 +23,7 @@ class Runner(Frame):
     def InitializeGUI(self):
         
         self.master.title("Plotter Controls")
-        self.master.geometry("400x300")
+        self.master.geometry("300x300")
         
         self.pack(expand=1)
         
@@ -31,21 +31,28 @@ class Runner(Frame):
         T.pack()
         T.insert(END, "Formats Accepted: TBA")
         
-        add_datafile_button = Button(self, text="Select Data", command=self.SelectData) #Button(self, text = "Quit Plotter", command=QuitPlotter)
-        add_datafile_button.pack(side=TOP)
-        
         plot_all_button = Button(self, text="Plot All", command=self.PlotDataAll)
-        plot_all_button.pack(side=LEFT)
+        plot_all_button.grid(row=0, column=0)
         
-        plot_none_button = Button(self, text="Blank Plot", command=self.PlotNoData)
-        plot_none_button .pack(side=RIGHT)
+        plot_data_button = Button(self, text="Plot Data Only", command=self.PlotDataBare)
+        plot_data_button.grid(row=1, column=0)
+        
+        plot_aux_button = Button(self, text="Aux Only Plot", command=self.PlotNoData)
+        plot_aux_button.grid(row=2, column=0)
        
-        dropdown_menu = Menu(self.master)
-        self.master.config(menu=dropdown_menu)
+        quit_button = Button(self, text="QUIT", command=self.QuitPlotter)
+        quit_button.grid(row=4, column=0)
+        
+        #save = IntVar()
+        #save_check = Checkbutton(self.master, text="Save Graph", variable=save)
+        #save_check.grid(row=5, column = 0)
+        
+       # dropdown_menu = Menu(self.master)
+       # self.master.config(menu=dropdown_menu)
        
-        file = Menu(dropdown_menu)
-        file.add_command(label="Quit", command=self.QuitPlotter)
-        dropdown_menu.add_cascade(label = "File", menu=file)
+        #file = Menu(dropdown_menu)
+        #file.add_command(label="Quit", command=self.QuitPlotter)
+        #dropdown_menu.add_cascade(label = "File", menu=file)
 
     
     def SelectData(self):
@@ -87,7 +94,7 @@ class Runner(Frame):
         return 0
     
     def QuitPlotter(self):
-        exit()
+        sys.exit()
     
     
 

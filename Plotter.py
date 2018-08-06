@@ -28,9 +28,10 @@ class Plotter():
         self.fig.set_visible(False)
         
         self.form = self.detFormat()
-        print(self.form)
+        print("Format: ", self.form)
         
-    def detFormat(self): #BROKEN
+    #determines the format type of the input data from a .txt file. Tells the program how to interpret the data    
+    def detFormat(self): 
         
         with open(self.filename) as f:
             content = f.readlines()
@@ -68,6 +69,7 @@ class Plotter():
         
         return form
     
+    #Interprets the data and formats it into a way that the program can understand and pass along to the plot
     def formatData(self, form):
         
         #easier for the simple data to just split it by rows
@@ -126,7 +128,7 @@ class Plotter():
         
         self.filename = askopenfilename(filetypes=[("Text Files", "*.txt")], title='Data')
         
-    def printFileData(self): #BROKEN
+    def printFileData(self): #BROKEN/UNUSED
         
         #Maybe take this stuff out i dont know, need it to know delimination or something I guess
         if (self.form == "c"):
@@ -136,20 +138,19 @@ class Plotter():
             del_ = "\s"
             d_s = 0
             
-        
         data = ascii.read(self.filename, delimiter = del_, data_start=d_s)
         print (data)
         print (type(data))
             
-        
+    #Actually plots the data onto the Molleweide plot 
     def plotFileData(self): 
     
         ras, decs = self.formatData(self.form)
         
         self.ax.scatter(ras, decs)
-        
         self.fig.set_visible(True)
-        
+    
+    #Plots the Celestial Equater onto the plot
     def plotCelEq(self):
         
         # To plot the celestial equator in galactic coordinates
@@ -198,10 +199,11 @@ class Plotter():
         
         self.fig.set_visible(True)
         
+    #Plots the telescope limits onto the plots
     def plotTelescopeLimit(self):
         
         #limits for the gemini north telescope 
-        dec_lim = [-30, 73] #degrees
+        dec_lim = [-30, 73] #degrees, these are possibly the true dec limits of the telescope
         ra_lim = [105, 345] #degrees
         
         ra = coord.Angle(ra_lim*u.degree)
@@ -222,11 +224,16 @@ class Plotter():
         self.plotTelescopeLimit()
         self.plotFileData()
         
+    def savePlot(self, plot_file_name):
+        
+        self.ax.savefig(plot_file_name)
+        
         
 #make the file an excecutable for convienince 
 #simple text additions
 #nicer GUI in general
 #Simbad for missing data 1
+#how to close/re run nice and easy 
     
 ##plotter = Plotter() this one
 #plotter.plotTelescopeLimit()
